@@ -1,0 +1,103 @@
+/*
+	A. 집합연산자
+	
+	1 . union 		: 두 집합의 결과를 합쳐서 출력, 단 중복이 있을경우 중복자료 제외
+	2 . union all : 두 집합의 결과를 합쳐서 출력 중복과 상관없이 전체 자료 조회
+	3 . intersect	: 두 집합의 교집합을 출력(정렬)
+	4 . minus			: 두 집합의 차집합을 출력(정렬), 선후가 중요
+	
+	[집합연산자의 조건]
+	1. 두 집합의 select 절의 컬럼수가 동수이어야 한다.
+	2. 두 집합의 select 절의 같은 위치의 컬럼의 데이터타입은 동일 데이터타입이어야한다.
+	3. 두 집합의 컬럼명이 달라도 상관없다. 단, 먼저 정의된 컬럼명으로 정해진다.
+	
+*/
+SELECT * from STUDENT;
+SELECT * FROM PROFESSOR;
+
+SELECT STUDNO 학생번호 FROM STUDENT;
+SELECT PROFNO 교수번호 FROM PROFESSOR;
+
+-- 1 . union : 학생번호와 교수번호 정보를 하나로 합치기
+
+SELECT STUDNO 학생번호 FROM STUDENT
+UNION
+SELECT PROFNO 교수번호 FROM PROFESSOR;
+
+
+SELECT PROFNO 교수번호 FROM PROFESSOR
+UNION
+SELECT STUDNO 학생번호 FROM STUDENT;
+
+
+SELECT name 교수명 FROM PROFESSOR
+UNION
+SELECT STUDNO 학생번호 FROM STUDENT; --(x) 데이터 타입이 다름.
+
+
+SELECT PROFNO 교수번호, name 교수명 FROM PROFESSOR
+UNION
+SELECT STUDNO 학생번호 FROM STUDENT; --(x) 컬럼갯수가 다르다.
+
+
+-- 2. union / union all
+SELECT count(*) from STUDENT; -- 집계함수 count(*[컬럼명])
+SELECT count(DEPTNO1) from STUDENT;
+SELECT count(DEPTNO2) from STUDENT; --null은 값이 아니다.
+
+
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT
+UNION
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT; --union은 중복제외
+
+
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT
+UNION ALL
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT; --union all은 중복상관없음.
+
+
+
+-- 3. union은 정렬하지만 / union all은 정렬하지 않는다.
+SELECT STUDNO, NAME, DEPTNO1, 1 FROM STUDENT WHERE DEPTNO1 = 101
+UNION
+SELECT STUDNO, NAME, DEPTNO1, 2 FROM STUDENT WHERE DEPTNO1 = 101; --정렬
+
+
+SELECT STUDNO, NAME, DEPTNO1, 1 FROM STUDENT WHERE DEPTNO1 = 101
+UNION ALL
+SELECT STUDNO, NAME, DEPTNO1, 2 FROM STUDENT WHERE DEPTNO1 = 101; --정렬하지 않음.
+
+
+-- 4. 교집합 INTERSECT
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT WHERE DEPTNO1 = 101
+INTERSECT
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT WHERE DEPTNO1 = 102;
+
+
+-- 5. 차집합 MINUS
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT WHERE DEPTNO1 = 101
+MINUS
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT WHERE DEPTNO1 = 102;
+
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT WHERE DEPTNO1 = 102
+MINUS
+SELECT STUDNO, NAME, DEPTNO1 FROM STUDENT WHERE DEPTNO1 = 101;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
